@@ -8,7 +8,7 @@ BetterRunable exampleTask = new BetterRunable(plugin, task -> {
   System.out.println("Task repeated " + task.executions + " times");
 
   //Executions is a built-in variable that is added each time a Task executes
-  if(task.executions > 50) task.cancel(); //Executions is
+  if(task.executions > 50) task.cancel();
 }, 20); //20 (ticks) = 1 second, current runnable will be executed every 1 second
 ```
 You can also create a group of Tasks that you can operate at once:
