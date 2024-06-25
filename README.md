@@ -50,6 +50,6 @@ repositories {
 }
 
 dependencies {
-  implementation 'com.github.KubawGaming:BetterRunnableAPI:v1.0.1'
+  implementation 'com.github.KubawGaming:BetterRunnableAPI:v1.0.2'
 }
 ```
