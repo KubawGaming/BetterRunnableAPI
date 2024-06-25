@@ -21,3 +21,16 @@ tasksGroup.pauseAll(); //Pause all tasks in group
 tasksGroup.unpauseAll(); //Unpause all tasks in group
 tasksGroup.cancelAll(); //Cancel all tasks in group
 ```
+
+## Gradle repository:
+
+```gradle
+repositories {
+  mavenCentral()
+  maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+  implementation 'com.github.KubawGaming:BetterRunnableAPI:v1.0.0'
+}
+```
