@@ -32,6 +32,7 @@ BetterAsyncRunnable exampleTask3 = new BetterAsyncRunnable(plugin, tasksAsyncGro
   System.out.println("Async task repeated " + task.executions + " times");
 }, 2000); //Repeating every 2 seconds
 
+//Another way to add task to a group
 tasksAsyncGroup.addTask(exampleTask3);
 
 tasksAsyncGroup.pauseAll(); //Pause all tasks in group
