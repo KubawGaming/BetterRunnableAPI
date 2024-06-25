@@ -1,13 +1,12 @@
 package me.kubaw208.betterrunableapi;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.function.Consumer;
 
-public final class BetterRunable {
+public class BetterRunable {
 
     @Getter private final JavaPlugin plugin;
     @Getter private Consumer<BetterRunable> task;
@@ -15,7 +14,7 @@ public final class BetterRunable {
     @Getter private long delay = 0;
     @Getter private long interval = 20;
     public long executions = 0;
-    @Getter private BukkitTask runnableID = null;
+    @Getter protected Object runnableID = null;
 
     public BetterRunable(JavaPlugin plugin, Consumer<BetterRunable> task, long interval) {
         this.plugin = plugin;
@@ -52,20 +51,17 @@ public final class BetterRunable {
         this.isPaused = false;
     }
 
-    private void startTask() {
-        runnableID = new BukkitRunnable() {
-            @Override
-            public void run() {
-                if(!isPaused) {
-                    task.accept(BetterRunable.this);
-                    if(Long.MAX_VALUE > executions + 1) executions++;
-                }
+    protected void startTask() {
+        runnableID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+            if(!isPaused) {
+                task.accept(this);
+                if(Long.MAX_VALUE > executions + 1) executions++;
             }
-        }.runTaskTimer(plugin, delay, interval);
+        }, delay, interval);
     }
 
     public void cancel() {
-        if(runnableID != null) runnableID.cancel();
+        if(runnableID != null) Bukkit.getScheduler().cancelTask((int) runnableID);
     }
 
 }
