@@ -52,6 +52,8 @@ public class BetterRunnable {
     }
 
     public void startTask() {
+        cancel();
+
         runnableID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             if(!isPaused) {
                 task.accept(this);
