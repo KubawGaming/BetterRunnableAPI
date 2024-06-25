@@ -1,0 +1,4 @@
+name: BetterRunableAPI
+version: '${version}'
+main: me.kubaw208.betterrunableapi.BetterRunableAPI
+api-version: '1.20'
