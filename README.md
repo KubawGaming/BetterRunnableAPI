@@ -29,8 +29,8 @@ You can create async task as well. Note that the time in BetterAsyncRunnable run
 ```java
 BetterRunnableGroup tasksAsyncGroup = new BetterRunnableGroup();
 BetterAsyncRunnable exampleTask3 = new BetterAsyncRunnable(plugin, tasksAsyncGroup, task -> {
-
-}, 1000); //Repeating every 1 second
+  System.out.println("Async task repeated " + task.executions + " times");
+}, 2000); //Repeating every 2 seconds
 
 tasksAsyncGroup.addTask(exampleTask3);
 
