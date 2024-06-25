@@ -6,17 +6,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.function.Consumer;
 
-public class BetterRunable {
+public class BetterRunnable {
 
     @Getter private final JavaPlugin plugin;
-    @Getter private Consumer<BetterRunable> task;
+    @Getter private Consumer<BetterRunnable> task;
     @Getter private boolean isPaused = false;
     @Getter private long delay = 0;
     @Getter private long interval = 20;
     public long executions = 0;
     @Getter protected Object runnableID = null;
 
-    public BetterRunable(JavaPlugin plugin, Consumer<BetterRunable> task, long interval) {
+    public BetterRunnable(JavaPlugin plugin, Consumer<BetterRunnable> task, long interval) {
         this.plugin = plugin;
         this.task = task;
         this.interval = interval > 0 ? interval : 1;
@@ -24,7 +24,7 @@ public class BetterRunable {
         startTask();
     }
 
-    public BetterRunable(JavaPlugin plugin, Consumer<BetterRunable> task, long delay, long interval) {
+    public BetterRunnable(JavaPlugin plugin, Consumer<BetterRunnable> task, long delay, long interval) {
         this.plugin = plugin;
         this.task = task;
         this.delay = delay;
@@ -33,12 +33,12 @@ public class BetterRunable {
         startTask();
     }
 
-    public BetterRunable(JavaPlugin plugin, BetterRunnableGroup group, Consumer<BetterRunable> task, long interval) {
+    public BetterRunnable(JavaPlugin plugin, BetterRunnableGroup group, Consumer<BetterRunnable> task, long interval) {
         this(plugin, task, interval);
         group.addTask(this);
     }
 
-    public BetterRunable(JavaPlugin plugin, BetterRunnableGroup group, Consumer<BetterRunable> task, long delay, long interval) {
+    public BetterRunnable(JavaPlugin plugin, BetterRunnableGroup group, Consumer<BetterRunnable> task, long delay, long interval) {
         this(plugin, task, delay, interval);
         group.addTask(this);
     }

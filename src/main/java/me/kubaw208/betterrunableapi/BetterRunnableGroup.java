@@ -6,32 +6,32 @@ import java.util.List;
 
 public final class BetterRunnableGroup {
 
-    ArrayList<BetterRunable> tasks = new ArrayList<>();
+    ArrayList<BetterRunnable> tasks = new ArrayList<>();
 
-    public BetterRunnableGroup(List<BetterRunable> tasks) {
-        this.tasks = (ArrayList<BetterRunable>) tasks;
+    public BetterRunnableGroup(List<BetterRunnable> tasks) {
+        this.tasks = (ArrayList<BetterRunnable>) tasks;
     }
 
-    public BetterRunnableGroup(BetterRunable... tasks) {
+    public BetterRunnableGroup(BetterRunnable... tasks) {
         this.tasks.addAll(Arrays.asList(tasks));
     }
 
-    public void addTask(BetterRunable task) {
+    public void addTask(BetterRunnable task) {
         tasks.add(task);
     }
 
     public void pauseAll() {
-        for(BetterRunable task : tasks)
+        for(BetterRunnable task : tasks)
             task.pause();
     }
 
     public void unpauseAll() {
-        for(BetterRunable task : tasks)
+        for(BetterRunnable task : tasks)
             task.unpause();
     }
 
     public void cancelAll() {
-        for(BetterRunable task : tasks)
+        for(BetterRunnable task : tasks)
             task.cancel();
     }
 
