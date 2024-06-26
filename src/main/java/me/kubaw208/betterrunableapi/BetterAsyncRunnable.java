@@ -30,12 +30,4 @@ public class BetterAsyncRunnable extends BetterRunnable {
         runnableID = Bukkit.getAsyncScheduler().runAtFixedRate(getPlugin(), scheduledTask -> run(), getDelay(), getInterval(), TimeUnit.MILLISECONDS);
     }
 
-    @Override
-    public void run() {
-        if(!isPaused()) {
-            getTask().accept(this);
-            if(Long.MAX_VALUE > executions + 1) executions++;
-        }
-    }
-
 }
