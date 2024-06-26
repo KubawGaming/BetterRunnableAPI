@@ -51,15 +51,16 @@ public class BetterRunnable {
         this.isPaused = false;
     }
 
-    public void startTask() {
+    private void startTask() {
         cancel();
+        runnableID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::run, delay, interval);
+    }
 
-        runnableID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-            if(!isPaused) {
-                task.accept(this);
-                if(Long.MAX_VALUE > executions + 1) executions++;
-            }
-        }, delay, interval);
+    public void run() {
+        if(!isPaused) {
+            task.accept(this);
+            if(Long.MAX_VALUE > executions + 1) executions++;
+        }
     }
 
     public void cancel() {
