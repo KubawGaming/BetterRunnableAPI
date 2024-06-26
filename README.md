@@ -1,4 +1,5 @@
 # BetterRunnableAPI
+[![](https://jitpack.io/v/KubawGaming/BetterRunnableAPI.svg)](https://jitpack.io/#KubawGaming/BetterRunnableAPI)
 Small library based on the Bukkit API that allows you to easily create a Task.
 The code was tested on minecraft version 1.20.4. I did not check compatibility with other versions!
 
@@ -41,7 +42,7 @@ tasksAsyncGroup.unpauseAll(); //Unpause all tasks in group
 tasksAsyncGroup.cancelAll(); //Cancel all tasks in group
 ```
 
-## Gradle repository:
+## Gradle:
 
 ```gradle
 repositories {
@@ -52,4 +53,19 @@ repositories {
 dependencies {
   implementation 'com.github.KubawGaming:BetterRunnableAPI:v1.0.2'
 }
+```
+
+## Maven:
+
+```maven
+<repository>
+  <id>jitpack.io</id>
+  <url>https://jitpack.io</url>
+</repository>
+
+<dependency>
+  <groupId>com.github.KubawGaming</groupId>
+  <artifactId>BetterRunnableAPI</artifactId>
+  <version>Tag</version>
+</dependency>
 ```
