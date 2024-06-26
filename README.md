@@ -52,13 +52,13 @@ repositories {
 }
 
 dependencies {
-  implementation 'com.github.KubawGaming:BetterRunnableAPI:v1.0.2'
+  implementation 'com.github.KubawGaming:BetterRunnableAPI:VERSION_HERE'
 }
 ```
 
 ## Maven:
 
-```maven
+```gradle
 <repository>
   <id>jitpack.io</id>
   <url>https://jitpack.io</url>
@@ -67,6 +67,6 @@ dependencies {
 <dependency>
   <groupId>com.github.KubawGaming</groupId>
   <artifactId>BetterRunnableAPI</artifactId>
-  <version>Tag</version>
+  <version>VERSION_HERE</version>
 </dependency>
 ```
