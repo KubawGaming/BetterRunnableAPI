@@ -1,5 +1,6 @@
 # BetterRunnableAPI
-[![](https://jitpack.io/v/KubawGaming/BetterRunnableAPI.svg)](https://jitpack.io/#KubawGaming/BetterRunnableAPI)
+<bold>[![](https://jitpack.io/v/KubawGaming/BetterRunnableAPI.svg)](https://jitpack.io/#KubawGaming/BetterRunnableAPI)</bold> <strong>Its project version used in gradle/maven</strong>
+
 <br>
 Small library based on the Bukkit API that allows you to easily create a Task.
 The code was tested on minecraft version 1.20.4. I did not check compatibility with other versions!
