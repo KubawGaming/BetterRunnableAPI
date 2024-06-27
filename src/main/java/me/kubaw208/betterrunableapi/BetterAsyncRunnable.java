@@ -12,14 +12,6 @@ public class BetterAsyncRunnable extends BetterRunnable {
         super(plugin, task, interval);
     }
 
-    public BetterAsyncRunnable(JavaPlugin plugin, Consumer<BetterRunnable> task, long delay, long interval) {
-        super(plugin, task, delay, interval);
-    }
-
-    public BetterAsyncRunnable(JavaPlugin plugin, BetterRunnableGroup group, Consumer<BetterRunnable> task, long delay, long interval) {
-        super(plugin, group, task, delay, interval);
-    }
-
     public BetterAsyncRunnable(JavaPlugin plugin, BetterRunnableGroup group, Consumer<BetterRunnable> task, long interval) {
         super(plugin, group, task, interval);
     }
