@@ -4,6 +4,7 @@
 <br>
 Small library based on the Bukkit API that allows you to easily create a Task.
 The code was tested on minecraft version 1.20.4. I did not check compatibility with other versions!
+After creating new instance of some BetterRunnable, task will start automaticly.
 
 ## Example of use:
 
