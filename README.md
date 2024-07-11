@@ -45,6 +45,27 @@ tasksAsyncGroup.unpauseAll(); //Unpause all tasks in group
 tasksAsyncGroup.cancelAll(); //Cancel all tasks in group
 ```
 
+You can create delayed task that you can pause! Example:
+
+```java
+BetterRunnableGroup delayedTasksGroup = new BetterRunnableGroup();
+BetterDelayedRunnable exampleTask4 = new BetterDelayedRunnable(plugin, delayedTasksGroup, task -> {
+  System.out.println("Hello from delayed task!");
+            
+  task.pause(); //Pause delayed task
+  new BetterDelayedRunnable(plugin, task2 -> task.unpause(), 1000); //Unpause after 1 second
+}, 40); //Execute once after 2 seconds
+```
+
+Similar to BetterAsyncRunnable, you can create an asynchronous delayed task that runs on milliseconds:
+
+```java
+//If you do not want to add a task to a group simply insert null
+BetterAsyncDelayedRunnable exampleTask5 = new BetterAsyncDelayedRunnable(plugin, null, task -> {
+  System.out.println("Hello from delayed async task!");
+}, 4000); //Execute once after 4 seconds
+```
+
 ## Gradle:
 
 ```gradle
