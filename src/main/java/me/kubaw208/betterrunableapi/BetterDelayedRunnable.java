@@ -27,6 +27,14 @@ public class BetterDelayedRunnable extends BetterRunnable {
     }
 
     @Override
+    public void run() {
+        super.run();
+        passedTimeInTicks = 0;
+        lostMillisecondsWhilePausing = 0;
+        taskStartedTime = 0;
+    }
+
+    @Override
     public void pause() {
         super.pause();
         cancel();
