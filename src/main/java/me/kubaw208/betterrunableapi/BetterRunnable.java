@@ -64,7 +64,10 @@ public class BetterRunnable {
     }
 
     public void cancel() {
-        if(runnableID != null) Bukkit.getScheduler().cancelTask((int) runnableID);
+        if(runnableID != null) {
+            Bukkit.getScheduler().cancelTask((int) runnableID);
+            runnableID = null;
+        }
     }
 
 }
