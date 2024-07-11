@@ -54,7 +54,7 @@ BetterDelayedRunnable exampleTask4 = new BetterDelayedRunnable(plugin, delayedTa
             
   task.pause(); //Pause delayed task
   new BetterDelayedRunnable(plugin, task2 -> task.unpause(), 20); //Unpause after 1 second (20 ticks)
-}, 40); //Execute once after 2 seconds
+}, 40); //Execute once after 2 seconds (including pause after 3 seconds)
 ```
 
 Similar to BetterAsyncRunnable, you can create an asynchronous delayed task that runs on milliseconds:
