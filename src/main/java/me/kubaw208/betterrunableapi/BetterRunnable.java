@@ -35,12 +35,16 @@ public class BetterRunnable {
 
     public BetterRunnable(JavaPlugin plugin, BetterRunnableGroup group, Consumer<BetterRunnable> task, long interval) {
         this(plugin, task, interval);
-        group.addTask(this);
+
+        if(group != null)
+            group.addTask(this);
     }
 
     public BetterRunnable(JavaPlugin plugin, BetterRunnableGroup group, Consumer<BetterRunnable> task, long delay, long interval) {
         this(plugin, task, delay, interval);
-        group.addTask(this);
+
+        if(group != null)
+            group.addTask(this);
     }
 
     public void pause() {
