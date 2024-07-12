@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'me.kubaw208'
-version = '3.0.1'
+version = '3.0.2'
 
 repositories {
     mavenCentral()
@@ -28,6 +28,7 @@ java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
+    withSourcesJar()
     if (JavaVersion.current() < javaVersion) {
         toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
