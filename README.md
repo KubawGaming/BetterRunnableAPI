@@ -66,7 +66,7 @@ BetterAsyncDelayedRunnable exampleTask5 = new BetterAsyncDelayedRunnable(plugin,
 }, 4000); // Execute once after 4 seconds
 ```
 
-## code refactoring
+## Code refactoring
 
 You can also split the code into parts using classes. Here is an example:
 
