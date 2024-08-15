@@ -10,10 +10,10 @@ After creating new instance of some BetterRunnable, task will start automaticly.
 
 ```java
 BetterRunnable exampleTask = new BetterRunnable(plugin, task -> {
-  System.out.println("Task repeated " + task.executions + " times");
+    System.out.println("Task repeated " + task.executions + " times");
 
-  // Executions is a built-in variable that is added each time a Task executes
-  if(task.executions > 50) task.cancel();
+    // Executions is a built-in variable that is added each time a Task executes
+    if(task.executions > 50) task.cancel();
 }, 20); // 20 (ticks) = 1 second, current runnable will be executed every 1 second
 ```
 
@@ -34,7 +34,7 @@ You can create async task as well. Note that the time in BetterAsyncRunnable run
 ```java
 BetterRunnableGroup tasksAsyncGroup = new BetterRunnableGroup();
 BetterAsyncRunnable exampleTask3 = new BetterAsyncRunnable(plugin, tasksAsyncGroup, task -> {
-  System.out.println("Async task repeated " + task.executions + " times");
+    System.out.println("Async task repeated " + task.executions + " times");
 }, 2000); // Repeating every 2 seconds
 
 //Another way to add task to a group
@@ -50,10 +50,10 @@ You can create delayed task that you can pause! Example:
 ```java
 BetterRunnableGroup delayedTasksGroup = new BetterRunnableGroup();
 BetterDelayedRunnable exampleTask4 = new BetterDelayedRunnable(plugin, delayedTasksGroup, task -> {
-  System.out.println("Hello from delayed task!");
+    System.out.println("Hello from delayed task!");
             
-  task.pause(); // Pause delayed task
-  new BetterDelayedRunnable(plugin, task2 -> task.unpause(), 20); // Unpause after 1 second (20 ticks)
+    task.pause(); // Pause delayed task
+    new BetterDelayedRunnable(plugin, task2 -> task.unpause(), 20); // Unpause after 1 second (20 ticks)
 }, 40); // Execute once after 2 seconds (including pause after 3 seconds)
 ```
 
@@ -62,7 +62,7 @@ Similar to BetterAsyncRunnable, you can create an asynchronous delayed task that
 ```java
 //If you do not want to add a task to a group simply insert null
 BetterAsyncDelayedRunnable exampleTask5 = new BetterAsyncDelayedRunnable(plugin, null, task -> {
-  System.out.println("Hello from delayed async task!");
+    System.out.println("Hello from delayed async task!");
 }, 4000); // Execute once after 4 seconds
 ```
 
@@ -90,10 +90,10 @@ After creating such a class and completing it with the code you want, you can ru
 
 ```java
 new BetterRunnable(
-  plugin,
-  null, // You can add your task to BetterRunnableGroup
-  new CustomTimer(),
-  20
+    plugin,
+    null, // You can add your task to BetterRunnableGroup
+    new CustomTimer(),
+    20
 );
 ```
 
@@ -101,12 +101,12 @@ new BetterRunnable(
 
 ```gradle
 repositories {
-  mavenCentral()
-  maven { url 'https://jitpack.io' }
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-  implementation 'com.github.KubawGaming:BetterRunnableAPI:VERSION_HERE'
+    implementation 'com.github.KubawGaming:BetterRunnableAPI:VERSION_HERE'
 }
 ```
 
@@ -114,13 +114,13 @@ dependencies {
 
 ```html
 <repository>
-  <id>jitpack.io</id>
-  <url>https://jitpack.io</url>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
 </repository>
 
 <dependency>
-  <groupId>com.github.KubawGaming</groupId>
-  <artifactId>BetterRunnableAPI</artifactId>
-  <version>VERSION_HERE</version>
+    <groupId>com.github.KubawGaming</groupId>
+    <artifactId>BetterRunnableAPI</artifactId>
+    <version>VERSION_HERE</version>
 </dependency>
 ```
