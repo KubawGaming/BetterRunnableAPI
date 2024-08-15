@@ -73,14 +73,16 @@ You can also split the code into parts using classes. Here is an example:
 ```java
 public class CustomTimer implements Consumer<BetterRunnable> {
 
+    private int time = 0;
+
     @Override
     public void accept(BetterRunnable betterRunnable) {
-        if(++betterRunnable.executions > 20) {
+        if(time++ > 20) {
             betterRunnable.cancel();
             return;
         }
 
-        System.out.println("Counting: " + betterRunnable.executions);
+        System.out.println("Counting: " + time);
     }
 
 }
