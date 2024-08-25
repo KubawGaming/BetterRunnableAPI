@@ -13,6 +13,7 @@ public class BetterDelayedRunnable extends BetterRunnable {
 
     private int passedTimeInTicks;
     private long taskStartedTime;
+    private boolean isRunning;
 
     /**
      * Creates new synchronous delayed task that is executed only once after given delay
@@ -43,6 +44,7 @@ public class BetterDelayedRunnable extends BetterRunnable {
         cancel();
         runnableID = Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), this::run, getDelay() - passedTimeInTicks);
         taskStartedTime = System.currentTimeMillis();
+        isRunning = true;
     }
 
     /**
@@ -53,13 +55,17 @@ public class BetterDelayedRunnable extends BetterRunnable {
         super.run();
         passedTimeInTicks = 0;
         taskStartedTime = 0;
+        isRunning = false;
     }
 
     /**
      * Pauses delayed task and saves the time already waited
+     * If task is not running, does nothing
      */
     @Override
     public void pause() {
+        if(!isRunning) return;
+
         super.pause();
         cancel();
         passedTimeInTicks += (int) (System.currentTimeMillis() - taskStartedTime) / 50;
@@ -67,10 +73,13 @@ public class BetterDelayedRunnable extends BetterRunnable {
 
     /**
      * Unpauses delayed task and starts it with missing time to complete task in correct time
+     * If task is not running, does nothing
      */
     @Override
     public void unpause() {
-        super.unpause();
+        if(!isRunning) return;
+
+            super.unpause();
         startTask();
     }
 
