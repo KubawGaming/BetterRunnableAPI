@@ -11,9 +11,9 @@ import java.util.function.Consumer;
  */
 public class BetterDelayedRunnable extends BetterRunnable {
 
-    private int passedTimeInTicks = 0;
-    private int lostMillisecondsWhilePausing = 0; //Saves milliseconds that is lost caused ticks accuracy so that in case of multiple pauses no more than 1 tick is lost
-    private long taskStartedTime = 0;
+    private int passedTimeInTicks;
+    private int lostMillisecondsWhilePausing; // Saves milliseconds that is lost caused ticks accuracy so that in case of multiple pauses no more than 1 tick is lost
+    private long taskStartedTime;
 
     /**
      * Creates new synchronous delayed task that is executed only once after given delay

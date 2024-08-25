@@ -12,8 +12,8 @@ import java.util.function.Consumer;
  */
 public class BetterAsyncDelayedRunnable extends BetterRunnable {
 
-    private int passedTimeInMilliseconds = 0;
-    private long taskStartedTime = 0;
+    private int passedTimeInMilliseconds;
+    private long taskStartedTime;
 
     /**
      * Creates new asynchronous delayed task that is executed only once after given delay
