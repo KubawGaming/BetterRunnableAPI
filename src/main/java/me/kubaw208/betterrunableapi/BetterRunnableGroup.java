@@ -61,7 +61,7 @@ public final class BetterRunnableGroup {
     /**
      * Stops all tasks and removes it from group
      */
-    public void cancelAllAndRemove() {
+    public void cancelAndRemoveAll() {
         for(BetterRunnable task : tasks) {
             task.cancel();
         }
