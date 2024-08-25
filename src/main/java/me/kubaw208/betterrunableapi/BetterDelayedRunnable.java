@@ -12,7 +12,6 @@ import java.util.function.Consumer;
 public class BetterDelayedRunnable extends BetterRunnable {
 
     private int passedTimeInTicks;
-    private int lostMillisecondsWhilePausing; // Saves milliseconds that is lost caused ticks accuracy so that in case of multiple pauses no more than 1 tick is lost
     private long taskStartedTime;
 
     /**
@@ -53,7 +52,6 @@ public class BetterDelayedRunnable extends BetterRunnable {
     public void run() {
         super.run();
         passedTimeInTicks = 0;
-        lostMillisecondsWhilePausing = 0;
         taskStartedTime = 0;
     }
 
@@ -64,14 +62,7 @@ public class BetterDelayedRunnable extends BetterRunnable {
     public void pause() {
         super.pause();
         cancel();
-
-        lostMillisecondsWhilePausing += (System.currentTimeMillis() - taskStartedTime) % 50;
         passedTimeInTicks += (int) (System.currentTimeMillis() - taskStartedTime) / 50;
-
-        if(lostMillisecondsWhilePausing >= 50) {
-            passedTimeInTicks++;
-            lostMillisecondsWhilePausing -= 50;
-        }
     }
 
     /**
