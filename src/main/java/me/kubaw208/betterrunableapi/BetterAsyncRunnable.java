@@ -1,5 +1,6 @@
 package me.kubaw208.betterrunableapi;
 
+import me.kubaw208.betterrunableapi.enums.PauseType;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,12 +26,35 @@ public class BetterAsyncRunnable extends BetterRunnable {
     /**
      * Creates new asynchronous task
      * @param plugin plugin main class that runs task
+     * @param pauseType pause type
+     * @param task code in task to run
+     * @param interval time in milliseconds between runs
+     */
+    public BetterAsyncRunnable(JavaPlugin plugin, PauseType pauseType, Consumer<BetterRunnable> task, long interval) {
+        super(plugin, pauseType, task, interval);
+    }
+
+    /**
+     * Creates new asynchronous task
+     * @param plugin plugin main class that runs task
      * @param task code in task to run
      * @param delay time in milliseconds to wait before first run
      * @param interval time in milliseconds between runs
      */
     public BetterAsyncRunnable(JavaPlugin plugin, Consumer<BetterRunnable> task, long delay, long interval) {
         super(plugin, task, delay, interval);
+    }
+
+    /**
+     * Creates new asynchronous task
+     * @param plugin plugin main class that runs task
+     * @param pauseType pause type
+     * @param task code in task to run
+     * @param delay time in milliseconds to wait before first run
+     * @param interval time in milliseconds between runs
+     */
+    public BetterAsyncRunnable(JavaPlugin plugin, PauseType pauseType, Consumer<BetterRunnable> task, long delay, long interval) {
+        super(plugin, pauseType, task, delay, interval);
     }
 
     /**
@@ -47,6 +71,18 @@ public class BetterAsyncRunnable extends BetterRunnable {
     /**
      * Creates new asynchronous task
      * @param plugin plugin main class that runs task
+     * @param pauseType pause type
+     * @param group tasks group that automatically adds task to that group
+     * @param task code in task to run
+     * @param interval time in milliseconds between runs
+     */
+    public BetterAsyncRunnable(JavaPlugin plugin, PauseType pauseType, BetterRunnableGroup group, Consumer<BetterRunnable> task, long interval) {
+        super(plugin, pauseType, group, task, interval);
+    }
+
+    /**
+     * Creates new asynchronous task
+     * @param plugin plugin main class that runs task
      * @param group tasks group that automatically adds task to that group
      * @param task code in task to run
      * @param delay time in milliseconds to wait before first run
@@ -54,6 +90,19 @@ public class BetterAsyncRunnable extends BetterRunnable {
      */
     public BetterAsyncRunnable(JavaPlugin plugin, BetterRunnableGroup group, Consumer<BetterRunnable> task, long delay, long interval) {
         super(plugin, group, task, delay, interval);
+    }
+
+    /**
+     * Creates new asynchronous task
+     * @param plugin plugin main class that runs task
+     * @param pauseType pause type
+     * @param group tasks group that automatically adds task to that group
+     * @param task code in task to run
+     * @param delay time in milliseconds to wait before first run
+     * @param interval time in milliseconds between runs
+     */
+    public BetterAsyncRunnable(JavaPlugin plugin, PauseType pauseType, BetterRunnableGroup group, Consumer<BetterRunnable> task, long delay, long interval) {
+        super(plugin, pauseType, group, task, delay, interval);
     }
 
     @Override
