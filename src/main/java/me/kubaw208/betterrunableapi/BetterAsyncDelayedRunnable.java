@@ -12,7 +12,7 @@ import java.util.function.Consumer;
  */
 public class BetterAsyncDelayedRunnable extends BetterRunnable {
 
-    private int passedTimeInMilliseconds;
+    private long passedTimeInMilliseconds;
     private long taskStartedTime;
     private boolean isRunning;
 
@@ -81,7 +81,6 @@ public class BetterAsyncDelayedRunnable extends BetterRunnable {
         if(!isRunning) return;
 
         super.unpause();
-        startTask();
     }
 
 }

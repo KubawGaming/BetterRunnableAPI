@@ -79,8 +79,7 @@ public class BetterDelayedRunnable extends BetterRunnable {
     public void unpause() {
         if(!isRunning) return;
 
-            super.unpause();
-        startTask();
+        super.unpause();
     }
 
 }

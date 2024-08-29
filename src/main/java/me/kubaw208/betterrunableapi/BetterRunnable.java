@@ -14,11 +14,11 @@ import java.util.function.Consumer;
 public class BetterRunnable {
 
     @Getter private final JavaPlugin plugin;
-    @Getter private Consumer<BetterRunnable> task;
+    @Getter private final Consumer<BetterRunnable> task;
     @Getter private PauseType pauseType = PauseType.AUTOMATIC;
     @Getter private boolean isPaused = false;
     @Getter private long delay = 0;
-    @Getter private long interval;
+    @Getter private final long interval;
     public long executions = 0;
     @Getter protected Object runnableID = null;
 
@@ -152,9 +152,8 @@ public class BetterRunnable {
     public void pause() {
         this.isPaused = true;
 
-        if(pauseType == PauseType.AUTOMATIC) {
+        if(pauseType == PauseType.AUTOMATIC)
             cancel();
-        }
     }
 
     /**
@@ -163,9 +162,8 @@ public class BetterRunnable {
     public void unpause() {
         this.isPaused = false;
 
-        if(pauseType == PauseType.AUTOMATIC) {
+        if(pauseType == PauseType.AUTOMATIC)
             startTask();
-        }
     }
 
     /**
