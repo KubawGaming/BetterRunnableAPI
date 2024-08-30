@@ -107,8 +107,15 @@ public class BetterAsyncRunnable extends BetterRunnable {
 
     @Override
     public void startTask() {
+        long startDelay = isRunning ? taskPausedTime - lastTaskExecutionTime : getDelay();
+
         cancel();
-        runnableID = Bukkit.getAsyncScheduler().runAtFixedRate(getPlugin(), scheduledTask -> run(), getDelay(), getInterval(), TimeUnit.MILLISECONDS);
+        runnableID = Bukkit.getAsyncScheduler().runAtFixedRate(getPlugin(), scheduledTask -> run(), startDelay, getInterval(), TimeUnit.MILLISECONDS);
+
+        if(!isRunning)
+            lastTaskExecutionTime = System.currentTimeMillis();
+
+        isRunning = true;
     }
 
 }

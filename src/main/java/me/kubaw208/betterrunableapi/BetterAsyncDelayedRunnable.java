@@ -14,7 +14,6 @@ public class BetterAsyncDelayedRunnable extends BetterRunnable {
 
     private long passedTimeInMilliseconds;
     private long taskStartedTime;
-    private boolean isRunning;
 
     /**
      * Creates new asynchronous delayed task that is executed only once after given delay
@@ -67,7 +66,7 @@ public class BetterAsyncDelayedRunnable extends BetterRunnable {
     public void pause() {
         if(!isRunning) return;
 
-        super.pause();
+        isPaused = true;
         cancel();
         passedTimeInMilliseconds += System.currentTimeMillis() - taskStartedTime;
     }
@@ -80,7 +79,8 @@ public class BetterAsyncDelayedRunnable extends BetterRunnable {
     public void unpause() {
         if(!isRunning) return;
 
-        super.unpause();
+        isPaused = false;
+        startTask();
     }
 
 }

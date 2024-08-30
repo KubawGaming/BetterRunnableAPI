@@ -16,10 +16,13 @@ public class BetterRunnable {
     @Getter private final JavaPlugin plugin;
     @Getter private final Consumer<BetterRunnable> task;
     @Getter private PauseType pauseType = PauseType.AUTOMATIC;
-    @Getter private boolean isPaused = false;
+    @Getter protected boolean isPaused = false;
     @Getter private long delay = 0;
     @Getter private final long interval;
     public long executions = 0;
+    protected long lastTaskExecutionTime;
+    protected long taskPausedTime;
+    protected boolean isRunning;
     @Getter protected Object runnableID = null;
 
     /**
@@ -150,44 +153,54 @@ public class BetterRunnable {
      * Pause task
      */
     public void pause() {
-        this.isPaused = true;
-
-        if(pauseType == PauseType.AUTOMATIC)
+        if(!isPaused && pauseType == PauseType.AUTOMATIC)
             cancel();
+
+        this.isPaused = true;
     }
 
     /**
      * Unpause task
      */
     public void unpause() {
-        this.isPaused = false;
-
-        if(pauseType == PauseType.AUTOMATIC)
+        if(isPaused && pauseType == PauseType.AUTOMATIC)
             startTask();
+
+        this.isPaused = false;
     }
 
     /**
      * Cancel task if it is running and starts it. Can be used to start task again
      */
     public void startTask() {
+        long startDelay = isRunning ? (taskPausedTime - lastTaskExecutionTime) / 50 : delay;
+
         cancel();
-        runnableID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::run, delay, interval);
+        runnableID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::run, startDelay, interval);
+
+        if(!isRunning)
+            lastTaskExecutionTime = System.currentTimeMillis();
+
+        isRunning = true;
     }
 
     /**
      * Code in method that executes when task runs
      */
     public void run() {
-        if(!isPaused) {
-            task.accept(this);
-            if(Long.MAX_VALUE > executions + 1) executions++;
-        }
+        if(isPaused) return;
+
+        task.accept(this);
+        if(Long.MAX_VALUE > executions + 1) executions++;
+        lastTaskExecutionTime = System.currentTimeMillis();
     }
 
     /**
      * Stops task
      */
     public void cancel() {
+        isRunning = false;
+
         if(runnableID != null) {
             Bukkit.getScheduler().cancelTask((int) runnableID);
             runnableID = null;
