@@ -198,13 +198,15 @@ public class BetterRunnable {
     /**
      * Stops task
      */
-    public void cancel() {
+    public boolean cancel() {
         isRunning = false;
 
         if(runnableID != null) {
             Bukkit.getScheduler().cancelTask((int) runnableID);
             runnableID = null;
+            return true;
         }
+        return false;
     }
 
 }
