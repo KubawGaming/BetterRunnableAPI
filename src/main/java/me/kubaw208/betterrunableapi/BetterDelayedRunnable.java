@@ -12,7 +12,6 @@ import java.util.function.Consumer;
 public class BetterDelayedRunnable extends BetterRunnable {
 
     private int passedTimeInTicks;
-    private long taskStartedTime;
 
     /**
      * Creates new synchronous delayed task that is executed only once after given delay
@@ -42,7 +41,7 @@ public class BetterDelayedRunnable extends BetterRunnable {
     public void startTask() {
         cancel();
         runnableID = Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), this::run, getDelay() - passedTimeInTicks);
-        taskStartedTime = System.currentTimeMillis();
+        taskStartedTime = Bukkit.getCurrentTick();
         isRunning = true;
     }
 
@@ -67,7 +66,7 @@ public class BetterDelayedRunnable extends BetterRunnable {
 
         isPaused = true;
         cancel();
-        passedTimeInTicks += (int) (System.currentTimeMillis() - taskStartedTime) / 50;
+        passedTimeInTicks += (Bukkit.getCurrentTick() - taskStartedTime);
     }
 
     /**
@@ -76,7 +75,7 @@ public class BetterDelayedRunnable extends BetterRunnable {
      */
     @Override
     public void unpause() {
-        if(!isRunning) return;
+        if(isRunning) return;
 
         isPaused = false;
         startTask();

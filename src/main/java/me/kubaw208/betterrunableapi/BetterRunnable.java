@@ -21,8 +21,10 @@ public class BetterRunnable {
     @Getter private final long interval;
     public long executions = 0;
     protected long lastTaskExecutionTime;
-    protected long taskPausedTime;
+    protected long newDelayAfterPauseTask;
     protected boolean isRunning;
+    protected int taskStartedTime;
+    private boolean hasRunnedOnce = false;
     @Getter protected Object runnableID = null;
 
     /**
@@ -153,8 +155,14 @@ public class BetterRunnable {
      * Pause task
      */
     public void pause() {
-        if(!isPaused && pauseType == PauseType.AUTOMATIC)
-            cancel();
+        newDelayAfterPauseTask = lastTaskExecutionTime - Bukkit.getCurrentTick() + (hasRunnedOnce ? interval : delay);
+
+        if(!isPaused && pauseType == PauseType.AUTOMATIC && runnableID != null) {
+            Bukkit.getScheduler().cancelTask((int) runnableID);
+            runnableID = null;
+        }
+
+        Bukkit.broadcastMessage("HEJA PAUZA");
 
         this.isPaused = true;
     }
@@ -166,6 +174,8 @@ public class BetterRunnable {
         if(isPaused && pauseType == PauseType.AUTOMATIC)
             startTask();
 
+        Bukkit.broadcastMessage("HEJA UNPAUZA");
+
         this.isPaused = false;
     }
 
@@ -173,13 +183,17 @@ public class BetterRunnable {
      * Cancel task if it is running and starts it. Can be used to start task again
      */
     public void startTask() {
-        long startDelay = isRunning ? (taskPausedTime - lastTaskExecutionTime) / 50 : delay;
+        if(!isRunning) {
+            taskStartedTime = Bukkit.getCurrentTick();
+            lastTaskExecutionTime = Bukkit.getCurrentTick();
+        }
 
-        cancel();
-        runnableID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::run, startDelay, interval);
+        if(runnableID != null) {
+            Bukkit.getScheduler().cancelTask((int) runnableID);
+            runnableID = null;
+        }
 
-        if(!isRunning)
-            lastTaskExecutionTime = System.currentTimeMillis();
+        runnableID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::run, (isRunning ? newDelayAfterPauseTask : delay), interval);
 
         isRunning = true;
     }
@@ -188,11 +202,10 @@ public class BetterRunnable {
      * Code in method that executes when task runs
      */
     public void run() {
-        if(isPaused) return;
-
         task.accept(this);
-        if(Long.MAX_VALUE > executions + 1) executions++;
-        lastTaskExecutionTime = System.currentTimeMillis();
+        if(Long.MAX_VALUE != executions + 1) executions++;
+        lastTaskExecutionTime = Bukkit.getCurrentTick();
+        hasRunnedOnce = true;
     }
 
     /**

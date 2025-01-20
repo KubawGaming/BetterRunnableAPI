@@ -13,6 +13,8 @@ import java.util.function.Consumer;
  */
 public class BetterAsyncRunnable extends BetterRunnable {
 
+    private long taskPausedTime;
+
     /**
      * Creates new asynchronous task
      * @param plugin plugin main class that runs task
@@ -116,6 +118,12 @@ public class BetterAsyncRunnable extends BetterRunnable {
             lastTaskExecutionTime = System.currentTimeMillis();
 
         isRunning = true;
+    }
+
+    @Override
+    public void pause() {
+        super.pause();
+        taskPausedTime = System.currentTimeMillis();
     }
 
 }
