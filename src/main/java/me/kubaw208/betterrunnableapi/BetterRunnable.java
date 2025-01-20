@@ -7,6 +7,7 @@ import me.kubaw208.betterrunnableapi.structs.PauseType;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -18,7 +19,7 @@ import java.util.function.Consumer;
 public class BetterRunnable implements BetterTask {
 
     protected final JavaPlugin plugin;
-    protected final List<BetterRunnableGroup> groups = List.of();
+    protected final ArrayList<BetterRunnableGroup> groups = new ArrayList<>();
     protected PauseType pauseType;
     protected final Consumer<BetterRunnable> task;
     protected Object runnableID = null;
@@ -89,7 +90,7 @@ public class BetterRunnable implements BetterTask {
     }
 
     @Override
-    public List<BetterRunnableGroup> getGroups() {
+    public ArrayList<BetterRunnableGroup> getGroups() {
         return groups;
     }
 

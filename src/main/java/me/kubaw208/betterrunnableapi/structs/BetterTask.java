@@ -2,11 +2,11 @@ package me.kubaw208.betterrunnableapi.structs;
 
 import me.kubaw208.betterrunnableapi.BetterRunnableGroup;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface BetterTask {
 
-    List<BetterRunnableGroup> getGroups();
+    ArrayList<BetterRunnableGroup> getGroups();
 
     void startTask();
 
