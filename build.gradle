@@ -54,7 +54,7 @@ publishing {
     }
     publications {
         gpr(MavenPublication) {
-            artifactId = "betterrunableapi"
+            artifactId = "betterrunnableapi"
             from(components.java)
         }
     }
