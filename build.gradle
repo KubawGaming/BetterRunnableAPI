@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
 group = 'me.kubaw208'
-version = '3.0.9'
+version = '4.0.0'
 
 repositories {
     mavenCentral()
@@ -39,6 +40,23 @@ tasks.withType(JavaCompile).configureEach {
 
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            artifactId = "betterrunnableapi"
+            from(components.java)
+        }
     }
 }
 
