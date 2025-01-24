@@ -53,7 +53,7 @@ public class BetterRunnable implements BetterTask {
         if(group != null)
             group.addTask(this);
 
-        startTask();
+        start();
     }
 
     /** @see #BetterRunnable(JavaPlugin, PauseType, BetterRunnableGroup, Consumer, long, long) */
@@ -102,7 +102,7 @@ public class BetterRunnable implements BetterTask {
     }
 
     @Override
-    public void startTask() {
+    public void start() {
         if(isStopped) {
             taskStartedTime = Bukkit.getCurrentTick();
             lastTaskExecutionTime = Bukkit.getCurrentTick();
@@ -124,15 +124,20 @@ public class BetterRunnable implements BetterTask {
      */
     @Override
     public boolean stop() {
+        while(!groups.isEmpty()) {
+            groups.get(0).removeTask(this);
+        }
+
         isStopped = true;
+
+        executions = 0;
+        pauseTime = 0;
+        pausedTime = 0;
 
         if(runnableID == null) return false;
 
         Bukkit.getScheduler().cancelTask((int) runnableID);
         runnableID = null;
-        executions = 0;
-        pauseTime = 0;
-        pausedTime = 0;
         return true;
     }
 
@@ -140,14 +145,25 @@ public class BetterRunnable implements BetterTask {
      * @param removeFromGroups if true, the task will be removed from all groups
      * @see #stop()
      */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean stop(boolean removeFromGroups) {
-        if(removeFromGroups)
-            for(var group : (ArrayList<BetterRunnableGroup>) groups.clone())
-                group.removeTask(this);
+        if(removeFromGroups) {
+            while(!groups.isEmpty()) {
+                groups.get(0).removeTask(this);
+            }
+        }
 
-        return this.stop();
+        isStopped = true;
+
+        executions = 0;
+        pauseTime = 0;
+        pausedTime = 0;
+
+        if(runnableID == null) return false;
+
+        Bukkit.getScheduler().cancelTask((int) runnableID);
+        runnableID = null;
+        return true;
     }
 
     @Override
@@ -182,7 +198,7 @@ public class BetterRunnable implements BetterTask {
         pausedTime += Bukkit.getCurrentTick() - pauseTime;
 
         if(pauseType == PauseType.AUTOMATIC)
-            startTask();
+            start();
 
         this.isPaused = false;
     }

@@ -73,7 +73,7 @@ public interface BetterTask {
     /**
      * Starts the task.
      */
-    void startTask();
+    void start();
 
     /**
      * Stops the task.

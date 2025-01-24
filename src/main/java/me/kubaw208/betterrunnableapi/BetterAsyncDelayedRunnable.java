@@ -39,10 +39,42 @@ public class BetterAsyncDelayedRunnable extends BetterDelayedRunnable {
     }
 
     @Override
-    public void startTask() {
+    public void start() {
         runnableID = Bukkit.getAsyncScheduler().runDelayed(getPlugin(), scheduledTask -> execute(), getDelay() - passedTime, TimeUnit.MILLISECONDS);
         taskStartedTime = System.currentTimeMillis();
         isStopped = false;
+    }
+
+    @Override
+    public boolean stop() {
+        while(!groups.isEmpty()) {
+            groups.get(0).removeTask(this);
+        }
+
+        isStopped = true;
+
+        if(runnableID == null) return false;
+
+        runnableID.cancel();
+        runnableID = null;
+        return true;
+    }
+
+    @Override
+    public boolean stop(boolean removeFromGroups) {
+        if(removeFromGroups) {
+            while(!groups.isEmpty()) {
+                groups.get(0).removeTask(this);
+            }
+        }
+
+        isStopped = true;
+
+        if(runnableID == null) return false;
+
+        runnableID.cancel();
+        runnableID = null;
+        return true;
     }
 
     @Override

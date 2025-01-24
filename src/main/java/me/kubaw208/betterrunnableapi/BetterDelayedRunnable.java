@@ -8,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -47,7 +46,7 @@ public class BetterDelayedRunnable implements BetterTask {
         if(group != null)
             group.addTask(this);
 
-        startTask();
+        start();
     }
 
     /** @see BetterDelayedRunnable#BetterDelayedRunnable(JavaPlugin, BetterRunnableGroup, Consumer, long) */
@@ -66,7 +65,7 @@ public class BetterDelayedRunnable implements BetterTask {
     }
 
     @Override
-    public void startTask() {
+    public void start() {
         runnableID = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this::execute, delay - passedTime);
         taskStartedTime = Bukkit.getCurrentTick();
         isStopped = false;
@@ -74,6 +73,10 @@ public class BetterDelayedRunnable implements BetterTask {
 
     @Override
     public boolean stop() {
+        while(!groups.isEmpty()) {
+            groups.get(0).removeTask(this);
+        }
+
         isStopped = true;
 
         if(runnableID == null) return false;
@@ -83,14 +86,21 @@ public class BetterDelayedRunnable implements BetterTask {
         return true;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean stop(boolean removeFromGroups) {
-        if(removeFromGroups)
-            for(var group : (ArrayList<BetterRunnableGroup>) groups.clone())
-                group.removeTask(this);
+        if(removeFromGroups) {
+            while(!groups.isEmpty()) {
+                groups.get(0).removeTask(this);
+            }
+        }
 
-        return this.stop();
+        isStopped = true;
+
+        if(runnableID == null) return false;
+
+        Bukkit.getScheduler().cancelTask((int) runnableID);
+        runnableID = null;
+        return true;
     }
 
     @Override
@@ -119,7 +129,7 @@ public class BetterDelayedRunnable implements BetterTask {
         if(!isPaused) return;
 
         isPaused = false;
-        startTask();
+        start();
     }
 
 }

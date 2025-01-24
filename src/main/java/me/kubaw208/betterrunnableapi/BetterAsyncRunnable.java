@@ -68,7 +68,7 @@ public class BetterAsyncRunnable extends BetterRunnable {
     }
 
     @Override
-    public void startTask() {
+    public void start() {
         if(isStopped) {
             taskStartedTime = System.currentTimeMillis();
             lastTaskExecutionTime = System.currentTimeMillis();
@@ -82,6 +82,50 @@ public class BetterAsyncRunnable extends BetterRunnable {
         runnableID = Bukkit.getAsyncScheduler().runAtFixedRate(getPlugin(), scheduledTask -> execute(), (isStopped ? delay : newDelayAfterPauseTask), getInterval(), TimeUnit.MILLISECONDS);
 
         isStopped = false;
+    }
+
+    @Override
+    public boolean stop() {
+        while(!groups.isEmpty()) {
+            groups.get(0).removeTask(this);
+        }
+
+        isStopped = true;
+
+        executions = 0;
+        pauseTime = 0;
+        pausedTime = 0;
+
+        if(runnableID == null) return false;
+
+        runnableID.cancel();
+        runnableID = null;
+        return true;
+    }
+
+    /**
+     * @param removeFromGroups if true, the task will be removed from all groups
+     * @see #stop()
+     */
+    @Override
+    public boolean stop(boolean removeFromGroups) {
+        if(removeFromGroups) {
+            while(!groups.isEmpty()) {
+                groups.get(0).removeTask(this);
+            }
+        }
+
+        isStopped = true;
+
+        executions = 0;
+        pauseTime = 0;
+        pausedTime = 0;
+
+        if(runnableID == null) return false;
+
+        runnableID.cancel();
+        runnableID = null;
+        return true;
     }
 
     @Override
@@ -113,7 +157,7 @@ public class BetterAsyncRunnable extends BetterRunnable {
         pausedTime += System.currentTimeMillis() - pauseTime;
 
         if(pauseType == PauseType.AUTOMATIC)
-            startTask();
+            start();
 
         this.isPaused = false;
     }

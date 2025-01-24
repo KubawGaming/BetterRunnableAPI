@@ -112,7 +112,7 @@ public final class BetterRunnableGroup {
      */
     public void startAll() {
         for(BetterTask task : tasks)
-            task.startTask();
+            task.start();
     }
 
     /**
