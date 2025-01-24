@@ -1,5 +1,8 @@
 package me.kubaw208.betterrunnableapi;
 
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
+import lombok.Getter;
+import me.kubaw208.betterrunnableapi.structs.BetterTask;
 import me.kubaw208.betterrunnableapi.structs.PauseType;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,10 +14,13 @@ import java.util.function.Consumer;
  * Classic asynchronous task class that is repeating in given an interval with possible delay on start.
  * Can be paused and unpaused.
  */
+@Getter
 public class BetterAsyncRunnable extends BetterRunnable {
 
+    private ScheduledTask runnableID;
+
     /**
-     * Creates a new asynchronous task
+     * Creates a new asynchronous task.
      * @param plugin plugin main class that runs task.
      * @param pauseType pause type (default: AUTOMATIC).
      * @param group tasks group that automatically adds a task to that group if a group is not null.
@@ -22,42 +28,42 @@ public class BetterAsyncRunnable extends BetterRunnable {
      * @param delay time in milliseconds to wait before the first run (default: 0).
      * @param interval time in milliseconds between runs.
      */
-    public BetterAsyncRunnable(JavaPlugin plugin, PauseType pauseType, BetterRunnableGroup group, Consumer<BetterRunnable> task, long delay, long interval) {
+    public BetterAsyncRunnable(JavaPlugin plugin, PauseType pauseType, BetterRunnableGroup group, Consumer<BetterTask> task, long delay, long interval) {
         super(plugin, pauseType, group, task, delay, interval);
     }
 
     /** @see #BetterAsyncRunnable(JavaPlugin, PauseType, BetterRunnableGroup, Consumer, long, long) */
-    public BetterAsyncRunnable(JavaPlugin plugin, BetterRunnableGroup group, Consumer<BetterRunnable> task, long delay, long interval) {
+    public BetterAsyncRunnable(JavaPlugin plugin, BetterRunnableGroup group, Consumer<BetterTask> task, long delay, long interval) {
         super(plugin, group, task, delay, interval);
     }
 
     /** @see #BetterAsyncRunnable(JavaPlugin, PauseType, BetterRunnableGroup, Consumer, long, long) */
-    public BetterAsyncRunnable(JavaPlugin plugin, PauseType pauseType, BetterRunnableGroup group, Consumer<BetterRunnable> task, long interval) {
+    public BetterAsyncRunnable(JavaPlugin plugin, PauseType pauseType, BetterRunnableGroup group, Consumer<BetterTask> task, long interval) {
         super(plugin, pauseType, group, task, interval);
     }
 
     /** @see #BetterAsyncRunnable(JavaPlugin, PauseType, BetterRunnableGroup, Consumer, long, long) */
-    public BetterAsyncRunnable(JavaPlugin plugin, BetterRunnableGroup group, Consumer<BetterRunnable> task, long interval) {
+    public BetterAsyncRunnable(JavaPlugin plugin, BetterRunnableGroup group, Consumer<BetterTask> task, long interval) {
         super(plugin, group, task, interval);
     }
 
     /** @see #BetterAsyncRunnable(JavaPlugin, PauseType, BetterRunnableGroup, Consumer, long, long) */
-    public BetterAsyncRunnable(JavaPlugin plugin, PauseType pauseType, Consumer<BetterRunnable> task, long delay, long interval) {
+    public BetterAsyncRunnable(JavaPlugin plugin, PauseType pauseType, Consumer<BetterTask> task, long delay, long interval) {
         super(plugin, pauseType, task, delay, interval);
     }
 
     /** @see #BetterAsyncRunnable(JavaPlugin, PauseType, BetterRunnableGroup, Consumer, long, long) */
-    public BetterAsyncRunnable(JavaPlugin plugin, Consumer<BetterRunnable> task, long delay, long interval) {
+    public BetterAsyncRunnable(JavaPlugin plugin, Consumer<BetterTask> task, long delay, long interval) {
         super(plugin, task, delay, interval);
     }
 
     /** @see #BetterAsyncRunnable(JavaPlugin, PauseType, BetterRunnableGroup, Consumer, long, long) */
-    public BetterAsyncRunnable(JavaPlugin plugin, PauseType pauseType, Consumer<BetterRunnable> task, long interval) {
+    public BetterAsyncRunnable(JavaPlugin plugin, PauseType pauseType, Consumer<BetterTask> task, long interval) {
         super(plugin, pauseType, task, interval);
     }
 
     /** @see #BetterAsyncRunnable(JavaPlugin, PauseType, BetterRunnableGroup, Consumer, long, long) */
-    public BetterAsyncRunnable(JavaPlugin plugin, Consumer<BetterRunnable> task, long interval) {
+    public BetterAsyncRunnable(JavaPlugin plugin, Consumer<BetterTask> task, long interval) {
         super(plugin, task, interval);
     }
 
@@ -69,13 +75,13 @@ public class BetterAsyncRunnable extends BetterRunnable {
         }
 
         if(runnableID != null) {
-            Bukkit.getScheduler().cancelTask((int) runnableID);
+            runnableID.cancel();
             runnableID = null;
         }
 
         runnableID = Bukkit.getAsyncScheduler().runAtFixedRate(getPlugin(), scheduledTask -> execute(), (isStopped ? delay : newDelayAfterPauseTask), getInterval(), TimeUnit.MILLISECONDS);
 
-        isStopped = true;
+        isStopped = false;
     }
 
     @Override
@@ -90,13 +96,26 @@ public class BetterAsyncRunnable extends BetterRunnable {
         if(isPaused) return;
 
         newDelayAfterPauseTask = lastTaskExecutionTime - System.currentTimeMillis() + (isStopped ? delay : interval);
+        pauseTime = System.currentTimeMillis();
 
         if(pauseType == PauseType.AUTOMATIC && runnableID != null) {
-            Bukkit.getScheduler().cancelTask((int) runnableID);
+            runnableID.cancel();
             runnableID = null;
         }
 
         this.isPaused = true;
+    }
+
+    @Override
+    public void unpause() {
+        if(!isPaused) return;
+
+        pausedTime += System.currentTimeMillis() - pauseTime;
+
+        if(pauseType == PauseType.AUTOMATIC)
+            startTask();
+
+        this.isPaused = false;
     }
 
 }

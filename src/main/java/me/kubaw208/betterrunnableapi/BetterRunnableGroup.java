@@ -133,7 +133,7 @@ public final class BetterRunnableGroup {
     }
 
     /**
-     * Stops all tasks and removes it from a group
+     * Stops all tasks and removes it from a group.
      */
     public void stopAndRemoveAll() {
         for(BetterTask task : tasks) {
