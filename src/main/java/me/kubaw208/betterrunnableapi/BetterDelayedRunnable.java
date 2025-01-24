@@ -73,17 +73,7 @@ public class BetterDelayedRunnable implements BetterTask {
 
     @Override
     public boolean stop() {
-        while(!groups.isEmpty()) {
-            groups.get(0).removeTask(this);
-        }
-
-        isStopped = true;
-
-        if(runnableID == null) return false;
-
-        Bukkit.getScheduler().cancelTask((int) runnableID);
-        runnableID = null;
-        return true;
+        return stop(true);
     }
 
     @Override
