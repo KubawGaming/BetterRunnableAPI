@@ -87,7 +87,6 @@ public final class BetterRunnableGroup {
     public boolean stopAndRemove(BetterTask task) {
         if(task == null || !tasks.contains(task)) return false;
 
-        tasks.remove(task);
         return task.stop();
     }
 
@@ -116,11 +115,11 @@ public final class BetterRunnableGroup {
     }
 
     /**
-     * Stops all tasks in the group.
+     * Stops all tasks in the group and removes it from all groups.
      */
     public void stopAll() {
-        for(BetterTask task : tasks)
-            task.stop();
+        while(!tasks.isEmpty())
+            tasks.get(0).stop();
     }
 
     /**
@@ -128,20 +127,8 @@ public final class BetterRunnableGroup {
      * @param removeFromGroups if true, the tasks will be removed from all groups.
      */
     public void stopAll(boolean removeFromGroups) {
-        for(BetterTask task : tasks)
-            task.stop(removeFromGroups);
-    }
-
-    /**
-     * Stops all tasks and removes it from a group.
-     */
-    public void stopAndRemoveAll() {
-        for(BetterTask task : tasks) {
-            task.getGroups().remove(this);
-            task.stop();
-        }
-
-        this.tasks.clear();
+        while(!tasks.isEmpty())
+            tasks.get(0).stop(removeFromGroups);
     }
 
 }
