@@ -96,7 +96,7 @@ new BetterRunnable(
     20
 );
 
-// You can use one class and start different type of tasks
+// You can use one class for a few types of tasks
 new BetterDelayedRunnable(
     plugin,
     new CustomTimer(),
