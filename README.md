@@ -2,7 +2,7 @@
 <bold>[![](https://jitpack.io/v/KubawGaming/BetterRunnableAPI.svg)](https://jitpack.io/#KubawGaming/BetterRunnableAPI)</bold> <strong>Its project version used in gradle/maven</strong>
 
 <br>
-Small library based on the Bukkit API that allows you to easily create a Task with additional implementations such as pausing.
+Small library based on the Bukkit API that allows you to easily create a task with additional implementations such as pausing.
 The code was tested on minecraft version 1.20.4. I did not check compatibility with other versions!
 After creating new instance of some BetterRunnable, task will start automaticly.
 This API should work only with paper and his forks!
@@ -13,7 +13,7 @@ This API should work only with paper and his forks!
 BetterTask exampleTask = new BetterRunnable(plugin, task -> {
     System.out.println("Task repeated " + task.getExecutions() + " times");
 
-    // Executions is a built-in variable that is increased each time a Task executes. It resets only when task is stopped by stop() method.
+    // Executions is a built-in variable that is increased each time a task executes. It resets only when task is stopped by stop() method.
     if(task.getExecutions() > 50) task.stop();
 }, 20); // 20 (ticks) = 1 second, current runnable will be executed every 1 second
 ```
