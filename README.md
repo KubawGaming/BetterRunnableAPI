@@ -5,7 +5,7 @@
 Small library based on the Bukkit API that allows you to easily create a task with additional implementations such as pausing.
 The code was tested on minecraft version 1.20.4. I did not check compatibility with other versions!
 After creating new instance of some BetterRunnable, task will start automaticly.
-This API should work only with paper and his forks!
+The predicted working of this API is on paper and his forks!
 
 ## Example of use:
 
