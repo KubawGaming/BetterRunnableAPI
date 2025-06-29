@@ -2,7 +2,6 @@ package me.kubaw208.betterrunnableapi;
 
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lombok.Getter;
-import me.kubaw208.betterrunnableapi.structs.BetterTask;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -52,11 +51,9 @@ public class BetterAsyncDelayedRunnable extends BetterDelayedRunnable {
 
     @Override
     public boolean stop(boolean removeFromGroups) {
-        if(removeFromGroups) {
-            while(!groups.isEmpty()) {
-                groups.get(0).removeTask(this);
-            }
-        }
+        if(removeFromGroups)
+            while(!groups.isEmpty())
+                groups.iterator().next().removeTask(this);
 
         isStopped = true;
 
@@ -68,15 +65,20 @@ public class BetterAsyncDelayedRunnable extends BetterDelayedRunnable {
     }
 
     @Override
-    public void pause() {
-        if(isPaused) return;
+    void pauseInternal(boolean wasHardPause, boolean wasSoftPause, boolean willHardPause, boolean willSoftPause) {
+        boolean wasTaskPreviousPaused = wasHardPause || wasSoftPause;
+        boolean willTaskBePaused = willHardPause || willSoftPause;
+
+        isHardPause = willHardPause;
+        isSoftPause = willSoftPause;
+
+        if(wasTaskPreviousPaused || !willTaskBePaused) return;
 
         if(runnableID != null) {
             runnableID.cancel();
             runnableID = null;
         }
 
-        isPaused = true;
         passedTime += (System.currentTimeMillis() - taskStartedTime);
     }
 

@@ -2,12 +2,11 @@ package me.kubaw208.betterrunnableapi;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import me.kubaw208.betterrunnableapi.structs.BetterTask;
 import me.kubaw208.betterrunnableapi.structs.PauseType;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.function.Consumer;
 
 /**
@@ -15,14 +14,15 @@ import java.util.function.Consumer;
  * Can be paused and unpaused.
  */
 @Getter
-public class BetterDelayedRunnable implements BetterTask {
+public class BetterDelayedRunnable extends BetterTask {
 
     protected final JavaPlugin plugin;
-    protected final ArrayList<BetterRunnableGroup> groups = new ArrayList<>();
+    protected final HashSet<BetterRunnableGroup> groups = new HashSet<>();
     protected final PauseType pauseType;
     protected final Consumer<BetterTask> task;
     protected Object runnableID = null;
-    protected boolean isPaused = false;
+    boolean isHardPause = false;
+    boolean isSoftPause = false;
     protected long delay;
     private final long interval = -1;
     private final long executions = -1;
@@ -78,11 +78,9 @@ public class BetterDelayedRunnable implements BetterTask {
 
     @Override
     public boolean stop(boolean removeFromGroups) {
-        if(removeFromGroups) {
-            while(!groups.isEmpty()) {
-                groups.get(0).removeTask(this);
-            }
-        }
+        if(removeFromGroups)
+            while(!groups.isEmpty())
+                groups.iterator().next().removeTask(this);
 
         isStopped = true;
 
@@ -102,23 +100,33 @@ public class BetterDelayedRunnable implements BetterTask {
     }
 
     @Override
-    public void pause() {
-        if(isPaused) return;
+    void pauseInternal(boolean wasHardPause, boolean wasSoftPause, boolean willHardPause, boolean willSoftPause) {
+        boolean wasTaskPreviousPaused = wasHardPause || wasSoftPause;
+        boolean willTaskBePaused = willHardPause || willSoftPause;
+
+        isHardPause = willHardPause;
+        isSoftPause = willSoftPause;
+
+        if(wasTaskPreviousPaused || !willTaskBePaused) return;
 
         if(runnableID != null) {
             Bukkit.getScheduler().cancelTask((int) runnableID);
             runnableID = null;
         }
 
-        isPaused = true;
         passedTime += (Bukkit.getCurrentTick() - taskStartedTime);
     }
 
     @Override
-    public void unpause() {
-        if(!isPaused) return;
+    void unpauseInternal(boolean wasHardPause, boolean wasSoftPause, boolean willHardPause, boolean willSoftPause) {
+        boolean wasTaskPreviousPaused = wasHardPause || wasSoftPause;
+        boolean willTaskBePaused = willHardPause || willSoftPause;
 
-        isPaused = false;
+        isHardPause = willHardPause;
+        isSoftPause = willSoftPause;
+
+        if(!wasTaskPreviousPaused || willTaskBePaused) return;
+
         start();
     }
 

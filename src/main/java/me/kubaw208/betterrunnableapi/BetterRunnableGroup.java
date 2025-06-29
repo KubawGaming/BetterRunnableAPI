@@ -1,12 +1,8 @@
 package me.kubaw208.betterrunnableapi;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import me.kubaw208.betterrunnableapi.structs.BetterTask;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -16,11 +12,12 @@ import java.util.List;
 @Getter
 public final class BetterRunnableGroup {
 
-    private final ArrayList<BetterTask> tasks = new ArrayList<>();
+    private final HashSet<BetterTask> tasks = new HashSet<>();
     private final HashSet<BetterRunnableGroup> parents = new HashSet<>();
     private final HashSet<BetterRunnableGroup> children = new HashSet<>();
-    @Getter(AccessLevel.PRIVATE) private boolean isGroupPaused = false;
     @Setter private boolean savePauseState = true;
+    private boolean isHardPause = false;
+    private boolean isSoftPause = false;
 
     /**
      * Creates a new tasks group.
@@ -42,13 +39,11 @@ public final class BetterRunnableGroup {
      * Adds a new task to group.
      */
     public BetterRunnableGroup addTask(BetterTask task) {
-        if(!task.getGroups().contains(this))
-            task.getGroups().add(this);
+        task.getGroups().add(this);
 
-        if(!tasks.contains(task))
-            tasks.add(task);
+        tasks.add(task);
 
-        if(savePauseState && isGroupPaused)
+        if(savePauseState && (isHardPause || isSoftPause))
             task.pause();
         else if(savePauseState)
             task.unpause();
@@ -177,7 +172,8 @@ public final class BetterRunnableGroup {
         for(BetterRunnableGroup group : children)
             group.pauseAll();
 
-        isGroupPaused = true;
+        isHardPause = true;
+        updatePauseState();
         return this;
     }
 
@@ -191,8 +187,26 @@ public final class BetterRunnableGroup {
         for(BetterRunnableGroup group : children)
             group.unpauseAll();
 
-        isGroupPaused = false;
+        isHardPause = false;
+        updatePauseState();
         return this;
+    }
+
+    void updatePauseState() {
+        isSoftPause = false;
+
+        for(var parent : parents) {
+            if(parent.isHardPause || parent.isSoftPause) {
+                isSoftPause = true;
+                break;
+            }
+        }
+
+        for(var child : children)
+            child.updatePauseState();
+
+        for(var task : tasks)
+            task.updatePauseState();
     }
 
     /**
@@ -212,7 +226,7 @@ public final class BetterRunnableGroup {
      */
     public BetterRunnableGroup stopAll() {
         while(!tasks.isEmpty())
-            tasks.get(0).stop();
+            tasks.iterator().next().stop();
 
         for(BetterRunnableGroup group : children)
             group.stopAll();
@@ -225,7 +239,7 @@ public final class BetterRunnableGroup {
      */
     public BetterRunnableGroup stopAll(boolean removeFromGroups) {
         while(!tasks.isEmpty())
-            tasks.get(0).stop(removeFromGroups);
+            tasks.iterator().next().stop(removeFromGroups);
 
         for(BetterRunnableGroup group : children)
             group.stopAll(removeFromGroups);
