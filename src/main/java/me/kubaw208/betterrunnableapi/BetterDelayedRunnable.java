@@ -41,10 +41,10 @@ public class BetterDelayedRunnable extends BetterTask {
         this.task = task;
         this.delay = delay;
 
+        start();
+
         if(group != null)
             group.addTask(this);
-
-        start();
     }
 
     /** @see BetterDelayedRunnable#BetterDelayedRunnable(JavaPlugin, BetterRunnableGroup, Consumer, long) */

@@ -48,10 +48,10 @@ public class BetterRunnable extends BetterTask {
         this.interval = interval > 0 ? interval : 1;
         this.isStopped = true;
 
+        start();
+
         if(group != null)
             group.addTask(this);
-
-        start();
     }
 
     /** @see #BetterRunnable(JavaPlugin, PauseType, BetterRunnableGroup, Consumer, long, long) */
