@@ -7,7 +7,14 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Class representing a group of tasks allowing the operation of multiple tasks in the same moment.
+ * Class representing a group of tasks allows to manage multiple tasks in the same moment.
+ *
+ * If a task pauses itself, a group won't be able to unpause it.
+ * There is applied hierarchy where if group/task pauses itself, parents of that object can't unpause him.
+ *
+ * Soft pause is a pause caused by parent (group), at least one parent with soft/hard pause will make its children soft paused.
+ * Hard pause is a pause caused by object itself (group/task) and applied to itself.
+ * Task will be paused if has any pause (either soft or hard).
  */
 @Getter
 public final class BetterRunnableGroup {
