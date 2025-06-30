@@ -21,8 +21,6 @@ public class BetterDelayedRunnable extends BetterTask {
     protected final PauseType pauseType;
     protected final Consumer<BetterTask> task;
     protected Object runnableID = null;
-    boolean isHardPause = false;
-    boolean isSoftPause = false;
     protected long delay;
     private final long interval = -1;
     private final long executions = -1;
