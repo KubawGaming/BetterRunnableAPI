@@ -50,10 +50,8 @@ public final class BetterRunnableGroup {
 
         tasks.add(task);
 
-        if(savePauseState && (isHardPause || isSoftPause))
-            task.pause();
-        else if(savePauseState)
-            task.unpause();
+        if(savePauseState)
+            task.updatePauseState();
         return this;
     }
 
@@ -83,6 +81,7 @@ public final class BetterRunnableGroup {
     public BetterRunnableGroup removeTask(BetterTask task) {
         task.getGroups().remove(this);
         tasks.remove(task);
+        task.updatePauseState();
         return this;
     }
 
@@ -110,6 +109,7 @@ public final class BetterRunnableGroup {
     public BetterRunnableGroup addChildGroup(BetterRunnableGroup group) {
         group.parents.add(this);
         children.add(group);
+        group.updatePauseState();
         return this;
     }
 
@@ -137,6 +137,7 @@ public final class BetterRunnableGroup {
     public BetterRunnableGroup removeChildGroup(BetterRunnableGroup group) {
         group.parents.remove(this);
         children.remove(group);
+        group.updatePauseState();
         return this;
     }
 
