@@ -5,6 +5,7 @@ import me.kubaw208.betterrunnableapi.structs.PauseType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
 @Getter
@@ -16,7 +17,7 @@ public abstract class BetterTask {
     /**
      * List of groups in which the task is added.
      */
-    public abstract HashSet<BetterRunnableGroup> getGroups();
+    public abstract Set<BetterRunnableGroup> getGroups();
 
     /**
      * Task to be executed.

@@ -6,7 +6,10 @@ import me.kubaw208.betterrunnableapi.structs.PauseType;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.function.Consumer;
 
 /**
@@ -17,7 +20,7 @@ import java.util.function.Consumer;
 public class BetterDelayedRunnable extends BetterTask {
 
     protected final JavaPlugin plugin;
-    protected final HashSet<BetterRunnableGroup> groups = new HashSet<>();
+    protected final Set<BetterRunnableGroup> groups = Collections.newSetFromMap(new WeakHashMap<>());
     protected final PauseType pauseType;
     protected final Consumer<BetterTask> task;
     protected Object runnableID = null;
