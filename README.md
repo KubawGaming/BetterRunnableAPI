@@ -32,13 +32,13 @@ tasksGroup.unpauseAll(); // Unpause all tasks in group
 tasksGroup.stopAll();
 ```
 
-You can create asynchronous tasks as well. Note that the time in BetterAsyncRunnable runs in milliseconds, not ticks!
+You can create asynchronous tasks as well.
 
 ```java
 BetterRunnableGroup tasksAsyncGroup = new BetterRunnableGroup();
 BetterTask exampleTask3 = new BetterAsyncRunnable(plugin, tasksAsyncGroup, task -> {
     System.out.println("Async task repeated " + task.getExecutions() + " times");
-}, 2000); // Repeating every 2 seconds
+}, 40); // Repeating every 2 seconds
 
 // Another way to add task to a group
 tasksAsyncGroup.addTask(exampleTask3);
@@ -59,12 +59,12 @@ exampleTask4.pause(); // Pause delayed task
 new BetterDelayedRunnable(plugin, task -> exampleTask4.unpause(), 20); // Unpause after 1 second (20 ticks)
 ```
 
-Similar to BetterAsyncRunnable, you can create an asynchronous delayed tasks that runs on milliseconds:
+Similar to BetterAsyncRunnable, you can create an asynchronous delayed tasks:
 
 ```java
 BetterTask exampleTask5 = new BetterAsyncDelayedRunnable(plugin, task -> {
     System.out.println("Hello from delayed async task!");
-}, 4000); // Execute once after 4 seconds
+}, 80); // Execute once after 4 seconds
 ```
 
 ## Code refactoring
