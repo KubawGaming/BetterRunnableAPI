@@ -4,7 +4,6 @@ import lombok.Getter;
 import me.kubaw208.betterrunnableapi.structs.PauseType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 

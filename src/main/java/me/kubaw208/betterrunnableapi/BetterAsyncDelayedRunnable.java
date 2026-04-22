@@ -1,11 +1,10 @@
 package me.kubaw208.betterrunnableapi;
 
-import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -15,14 +14,14 @@ import java.util.function.Consumer;
 @Getter
 public class BetterAsyncDelayedRunnable extends BetterDelayedRunnable {
 
-    private ScheduledTask runnableID;
+    private BukkitTask runnableID;
 
     /**
      * Creates a new asynchronous delayed task executed only once after given delay.
      * @param plugin plugin main class that runs task.
      * @param group tasks group that automatically adds a task to that group if a group is not null.
      * @param task code in task to execute.
-     * @param delay time in milliseconds to wait before the first run (default: 0).
+     * @param delay time in ticks to wait before the first run (default: 0).
      */
     public BetterAsyncDelayedRunnable(JavaPlugin plugin, BetterRunnableGroup group, Consumer<BetterTask> task, long delay) {
         super(plugin, group, task, delay);
@@ -39,7 +38,11 @@ public class BetterAsyncDelayedRunnable extends BetterDelayedRunnable {
 
     @Override
     public void start() {
-        runnableID = Bukkit.getAsyncScheduler().runDelayed(getPlugin(), scheduledTask -> execute(), getDelay() - passedTime, TimeUnit.MILLISECONDS);
+        runnableID = Bukkit.getScheduler().runTaskLaterAsynchronously(
+                getPlugin(),
+                this::execute,
+                (getDelay() - passedTime)
+        );
         taskStartedTime = System.currentTimeMillis();
         isStopped = false;
     }

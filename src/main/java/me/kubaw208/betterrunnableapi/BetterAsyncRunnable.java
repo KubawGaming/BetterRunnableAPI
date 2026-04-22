@@ -1,12 +1,11 @@
 package me.kubaw208.betterrunnableapi;
 
-import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lombok.Getter;
 import me.kubaw208.betterrunnableapi.structs.PauseType;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -16,7 +15,7 @@ import java.util.function.Consumer;
 @Getter
 public class BetterAsyncRunnable extends BetterRunnable {
 
-    private ScheduledTask runnableID;
+    private BukkitTask runnableID;
 
     /**
      * Creates a new asynchronous task.
@@ -24,8 +23,8 @@ public class BetterAsyncRunnable extends BetterRunnable {
      * @param pauseType pause type (default: AUTOMATIC).
      * @param group tasks group that automatically adds a task to that group if a group is not null.
      * @param task code in task to execute.
-     * @param delay time in milliseconds to wait before the first run (default: 0).
-     * @param interval time in milliseconds between runs.
+     * @param delay time in ticks to wait before the first run (default: 0).
+     * @param interval time in ticks between runs.
      */
     public BetterAsyncRunnable(JavaPlugin plugin, PauseType pauseType, BetterRunnableGroup group, Consumer<BetterTask> task, long delay, long interval) {
         super(plugin, pauseType, group, task, delay, interval);
@@ -78,7 +77,12 @@ public class BetterAsyncRunnable extends BetterRunnable {
             runnableID = null;
         }
 
-        runnableID = Bukkit.getAsyncScheduler().runAtFixedRate(getPlugin(), scheduledTask -> execute(), (isStopped ? delay : newDelayAfterPauseTask), getInterval(), TimeUnit.MILLISECONDS);
+        runnableID = Bukkit.getScheduler().runTaskTimerAsynchronously(
+                getPlugin(),
+                this::execute,
+                (isStopped ? delay : newDelayAfterPauseTask),
+                getInterval()
+        );
 
         isStopped = false;
     }
